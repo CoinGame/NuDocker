@@ -20,6 +20,7 @@ Clone this repo
 Build the peer-qa image
   
   $ cd peer-qa-containers
+  
   $ sudo docker build -t="pennybreak/peer-qa:v1" .
 
 ==================
