@@ -39,6 +39,6 @@ List running containers
   
 View container log (deamon mode)
 
-  $ sudo docker logs -f [container name]
+  $ sudo docker logs [container name]
   
   
