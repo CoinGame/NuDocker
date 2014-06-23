@@ -7,6 +7,10 @@ cd peershares/src/
 echo "Compiling source ..."
 make -f makefile.unix BDB_INCLUDE_PATH="/usr/local/BerkeleyDB.4.8/include" BDB_LIB_PATH="/usr/local/BerkeleyDB.4.8/lib"
 echo "Starting deamon ..."
-./peersharesd
-sleep 10
-watch -n 30 ./peersharesd getinfo
+./peersharesd &
+sleep 5
+while true; do
+./peersharesd getinfo
+./peersharesd getaddressesbyaccount ''
+sleep 30
+done
