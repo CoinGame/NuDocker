@@ -33,4 +33,12 @@ Start container (interactive mode)
 
   $ sudo docker run -t -i pennybreak/peer-qa:v1 /bin/bash
   
+List running containers
 
+  $ sudo docker ps
+  
+View container log (deamon mode)
+
+  $ sudo docker logs -f <container name>
+  
+  
