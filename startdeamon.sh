@@ -6,6 +6,4 @@ cd peershares/src/
 make -f makefile.unix BDB_INCLUDE_PATH="/usr/local/BerkeleyDB.4.8/include" BDB_LIB_PATH="/usr/local/BerkeleyDB.4.8/lib"
 ./peersharesd &
 sleep 5
-./peersharesd getinfo
-./peersharesd getaddressesbyaccount ''
-./peersharesd stop
+watch -n 30 ./peersharesd getinfo
