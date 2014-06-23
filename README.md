@@ -25,6 +25,12 @@ Build the peer-qa image
 
 ==================
 
-Start new container
+Start new container (deamon mode)
   
   $ sudo docker run -d pennybreak/peer-qa:v1 /bin/sh peer-qa-containers/addcontainer.sh
+  
+Start container (interactive mode)
+
+  $ sudo docker run -t -i pennybreak/peer-qa:v1 /bin/bash
+  
+
