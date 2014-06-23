@@ -11,6 +11,16 @@ https://docs.docker.com/installation/ubuntulinux/#ubuntu-trusty-1404-lts-64-bit
 
 ==================
 
+Pull down the base Ubuntu 14.04 image from Docker
+
+  $ sudo docker pull ubuntu:14.04
+  
+Make sure you have the base image with:
+  
+  $ sudo docker images
+
+==================
+
 Clone this repo
   
   $ git clone https://github.com/pennybreak/peer-qa-containers.git
