@@ -15,7 +15,7 @@ ex.
 ./ABBAD.sh ~/<Path to nubit source>
 
 
-This script will generate the qt and daemon, and then copy the daemon to the NuDocker folder.
+This script will generate the qt/daemon and copy the daemon to the NuDocker folder.
 
 Then run StartContainer from the NuDcoker folder.
 
