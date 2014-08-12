@@ -23,7 +23,7 @@ ex.
 
 ./StartContainer.sh
 
-This will probably take a while if it's the first time you're running it. It should take a couple of seconds each time you run it after that unless you change the DockerFile. It it will download the Ubuntu 14.04 docker image, install the needed dependencies to run the daemon and some other stuff like nano and an ssh server.
+This will probably take a while if it's the first time you're running it. It should take a couple of seconds each time you run it after that unless you change the DockerFile. It it will download the Ubuntu 14.04 docker image, install the needed dependencies to run the daemon, and some other stuff like nano/ssh server.
 
 
 It will automatically start three containers. You can edit this file if you would like to add more or remove some. You don't have to use all of them anyway. Once the script is completed it will automatically run (sudo docker ps) to show information about the containers. You will see five entries like this for each container.
