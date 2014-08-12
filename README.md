@@ -1,4 +1,9 @@
-Clone NuDocker to your home directory. ex. ~/NuDocker
+Clone NuDocker and Nubit to your home directory. 
+
+ex. 
+
+~/NuDocker 
+~/Nubit
 
 Use ABBAD.sh to generate a unique blockchain by pointing to the master source files. This will prevent clients from syncing up with the wrong chain or possibly the actual mainnet/testnet. Provide the path to source as a parameter. Make sure to use a full path.
 
@@ -33,6 +38,3 @@ note that in any case where you're telling resources to access these ports you w
 when you ssh into the container nud should be in the working directory. Just type ./nud --deamon and you should be ready to connect your container to the host. We must prepare our conf file to connect to the container first.
 
 Use the sample host conf file in the NuDocker folder to connect to your containers. You will see a section with the connect configuration parameter. All you need to do is replace PORT at the end of the connect parameter with the proper protocol port you will be using (either testnet port or mainnet port - they are both listed at the top of the file)
-
-
-
