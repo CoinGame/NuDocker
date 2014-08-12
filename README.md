@@ -35,6 +35,6 @@ ssh root@127.0.0.01 -p 49667
 
 note that in any case where you're telling resources to access these ports you will use 127.0.0.1 instead of the displayed 0.0.0.0. the default root password is "nubits".
 
-when you ssh into the container nud should be in the working directory. Just type ./nud --deamon and you should be ready to connect your container to the host. We must prepare our conf file to connect to the container first.
+when you ssh into the container nud should be in the working directory. Just type ./nud --deamon and you should be ready to connect your container to the host. A testnet conf file will be automatically generated inside the container. We must prepare our host conf file to connect to the containers first.
 
 Use the sample host conf file in the NuDocker folder to connect to your containers. You will see a section with the connect configuration parameter. All you need to do is replace PORT at the end of the connect parameter with the proper protocol port you will be using (either testnet port or mainnet port - they are both listed at the top of the file)
