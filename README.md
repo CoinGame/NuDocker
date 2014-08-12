@@ -3,7 +3,10 @@ Clone NuDocker and Nubit to your home directory.
 ex. 
 
 ~/NuDocker 
+
 ~/Nubit
+
+**Running ABBAD.sh is optional. You can skip this step and move onto running StartContainer.sh if you copy your own version of the Nu daemon (nud) to the NuDocker folder first**
 
 Use ABBAD.sh to generate a unique blockchain by pointing to the master source files. This will prevent clients from syncing up with the wrong chain or possibly the actual mainnet/testnet. Provide the path to source as a parameter. Make sure to use a full path.
 
@@ -27,13 +30,13 @@ It will automatically start three containers. You can edit this file if you woul
 
 0.0.0.0:49667->22/tcp
 
-These show the port bindings to access resources inside the container. Docker works by binding one of the host ports and then forwarding it to the associated internal container port. In the example above the host port 49667 will connect us to port 22 inside the container. You will have to ssh into the container and start nud before you can connect from the host. ssh into the container like you would any server by using the host port binding.
+These show the port bindings to access resources inside the container. Docker works by binding one of the host ports and then forwarding it to the associated internal container port. In the example above the host port 49667 will connect us to port 22 inside the container. **You will have to ssh into the container and start nud before you can connect from the host.** ssh into the container like you would any server by using the host port binding.
 
 ex.
 
 ssh root@127.0.0.01 -p 49667
 
-note that in any case where you're telling resources to access these ports you will use 127.0.0.1 instead of the displayed 0.0.0.0. the default root password is "nubits".
+note that in any case where you're telling resources to access these ports you will use 127.0.0.1 instead of the displayed 0.0.0.0. **the default root password is "nubits".**
 
 when you ssh into the container nud should be in the working directory. Just type ./nud --deamon and you should be ready to connect your container to the host. A testnet conf file will be automatically generated inside the container. We must prepare our host conf file to connect to the containers first.
 
