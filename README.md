@@ -33,7 +33,7 @@ ex.
 
 ssh root@127.0.0.01 -p 49667
 
-note that in any case where you're telling resources to access these ports you will use 127.0.0.1 instead of the displayed 0.0.0.0.
+note that in any case where you're telling resources to access these ports you will use 127.0.0.1 instead of the displayed 0.0.0.0. the default root password is "nubits".
 
 when you ssh into the container nud should be in the working directory. Just type ./nud --deamon and you should be ready to connect your container to the host. We must prepare our conf file to connect to the container first.
 
