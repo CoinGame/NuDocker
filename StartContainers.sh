@@ -2,7 +2,9 @@ sudo docker pull ubuntu:14.04
 
 sudo docker build -t="Nodes" .
 
-sudo docker rm -f $(sudo docker ps -a)
+sudo docker rm -f Node1
+sudo docker rm -f Node2
+sudo docker rm -f Node3
 
 clear
 
