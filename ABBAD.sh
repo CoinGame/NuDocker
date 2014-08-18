@@ -24,14 +24,14 @@ srcMerkleRootOfficial="3e6c2608685f1d66d8fe9cb798400ec16aec1574b7ad9a7a92a65c7fc
 srcMerkleRootTestNet="d044ad667adb2ec5073dc2f033f8ed9458f92515eb13310fb1fccfb4242cf31d"
 
 #Seting some predefined variables to use later
-RegularTimeSwitch=$(date --date='5 hour'  --utc)
-EpochTimeSwitch=$(date +%s --date='5 hour')
+RegularTimeSwitch=$(date --date='1 day'  --utc)
+EpochTimeSwitch=$(date +%s --date='1 day')
 RegularTime=$(date)
 EpochTime=$(date +%s)
 #Get a big ass random string
 RandomString=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-if [[ $3 = "dep" ]]; then
+if [[ $1 = "dep" ]]; then
 
 #Install dependencies
 sudo apt-add-repository ppa:bitcoin/bitcoin -y
