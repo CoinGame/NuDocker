@@ -31,7 +31,7 @@ EpochTime=$(date +%s)
 #Get a big ass random string
 RandomString=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-if [[ $1 = "dep" ]]; then
+if [[ $2 = "dep" ]]; then
 
 #Install dependencies
 sudo apt-add-repository ppa:bitcoin/bitcoin -y
@@ -83,11 +83,11 @@ cd ~
 rm -rf ~/.nu
 
 cd ~
-mkdir -p ".$dataF"
-cd ".$dataF"
-touch "${dataF}.conf"
-echo rpcuser=safasfasdf >> "${dataF}.conf"
-echo rpcpassword=asdfasdfadsf >> "${dataF}.conf"
+mkdir -p ~/.nu
+cd ~/.nu
+touch nu.conf
+echo rpcuser=safasfasdf >> nu.conf
+echo rpcpassword=asdfasdfadsf >> nu.conf
 
 cd "$src"
 
@@ -178,19 +178,19 @@ make
 mv ~/.nu ~/.nu$RandomString
 mkdir ~/.nu
 
-cd ".$dataF"
-touch "${dataF}.conf"
+cd ~/.nu
+touch nu.conf
 
-echo \#testnet=1 >> "${dataF}.conf"
-echo \#server=1 >> "${dataF}.conf"
-echo rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> "${dataF}.conf"
-echo rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> "${dataF}.conf"
+echo \#testnet=1 >> nu.conf
+echo \#server=1 >> nu.conf
+echo rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
+echo rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
 
-echo \#INFO >> "${dataF}.conf"
-echo \#PROTOCOL PORT 7890 >> "${dataF}.conf"
-echo \#RPC PORT 14001 >> "${dataF}.conf"
-echo \#TESTNET PORT      7895 >> "${dataF}.conf"
-echo \#TESTNET RPC PORT 15001 >> "${dataF}.conf"
+echo \#INFO >> nu.conf
+echo \#PROTOCOL PORT 7890 >> nu.conf
+echo \#RPC PORT 14001 >> nu.conf
+echo \#TESTNET PORT      7895 >> nu.conf
+echo \#TESTNET RPC PORT 15001 >> nu.conf
 
 
 echo "MerkleRoot=$merkRootString"
