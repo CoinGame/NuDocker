@@ -204,8 +204,6 @@ echo "TestNonceString=$NonceStringTest"
 #BEGIN DOCKER SECTION
 
 #Making sure we have the image we will use for our docker 
-sudo docker pull ubuntu:14.04
-
 
 mkdir ~/nudocker
 cd ~/nudocker
