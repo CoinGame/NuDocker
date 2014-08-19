@@ -161,6 +161,8 @@ sed -i -e "s@.*$srcPszTimestampOfficial.*@        const char* pszTimestamp = \"$
 -e "s@assert(block.hashMerkleRoot == uint256(\"0x$srcMerkleRootTestNet\"));@assert(block.hashMerkleRoot == uint256(\"0x$merkRootStringTest\"));@" main.cpp
 
 
+#need to fix this so i don't have to update the merkelroot when it changes. All other lines that need to be changed can be found dynamicaly.
+
 #cat main.cpp | tr '\n' '@' | sed -e "s/"@$srcMerkleRootOfficial.*@"/            assert(block.hashMerkleRoot == uint256(\"0x$merkRootString\"));/1" \
 #-e "s/@$srcMerkleRootTestNet.*@/            assert(block.hashMerkleRoot == uint256(\"0x$merkRootStringTest\"));/2" | tr '@' '\n' > main.cppp
 
@@ -179,10 +181,17 @@ mkdir ~/.nu
 cd ".$dataF"
 touch "${dataF}.conf"
 
-echo \#test=1 >> "${dataF}.conf"
+echo \#testnet=1 >> "${dataF}.conf"
 echo \#server=1 >> "${dataF}.conf"
-echo rpcuser=safasfasdf >> "${dataF}.conf"
-echo rpcpassword=asdfasdfadsf >> "${dataF}.conf"
+echo rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> "${dataF}.conf"
+echo rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> "${dataF}.conf"
+
+echo \#INFO >> "${dataF}.conf"
+echo \#PROTOCOL PORT 7890 >> "${dataF}.conf"
+echo \#RPC PORT 14001 >> "${dataF}.conf"
+echo \#TESTNET PORT      7895 >> "${dataF}.conf"
+echo \#TESTNET RPC PORT 15001 >> "${dataF}.conf"
+
 
 echo "MerkleRoot=$merkRootString"
 echo "GenHashString=$genHashString"
@@ -195,7 +204,7 @@ echo "TestNonceString=$NonceStringTest"
 #BEGIN DOCKER SECTION
 
 #Making sure we have the image we will use for our docker 
-sudo docker pull phusion/baseimage
+sudo docker pull ubuntu:14.04
 
 
 mkdir ~/nudocker
