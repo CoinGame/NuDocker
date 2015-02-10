@@ -22,6 +22,9 @@ srcPszTimestampOfficial=" pszTimestamp = "
 srcPszTimestampTestnet="            pszTimestamp="
 srcMerkleRootOfficial="3e6c2608685f1d66d8fe9cb798400ec16aec1574b7ad9a7a92a65c7fcea2d32a"
 srcMerkleRootTestNet="d044ad667adb2ec5073dc2f033f8ed9458f92515eb13310fb1fccfb4242cf31d"
+srcDNSseedLine1="    0x47a034c6, 0x04d934c6, 0x4bc734c6, 0x2ec734c6, 0x2bd0f2a2, 0x92c8edc0,"
+srcDNSseedLine2="    0x0bd4b977, 0x003fc977,"
+srcDataDir="    return pathRet / \".nu\";"
 
 #Seting some predefined variables to use later
 RegularTimeSwitch=$(date --date='1 day'  --utc)
@@ -30,8 +33,9 @@ RegularTime=$(date)
 EpochTime=$(date +%s)
 #Get a big ass random string
 RandomString=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+newDataDir="    return pathRet / \".nuTESTING\";"
 
-if [[ $2 = "dep" ]]; then
+if [[ $1 = "dep" ]]; then
 
 #Install dependencies
 sudo apt-add-repository ppa:bitcoin/bitcoin -y
@@ -51,6 +55,10 @@ wget "http://miniupnp.tuxfamily.org/files/download.php?file=miniupnpc-1.9.tar.gz
 tar -zxvf download.php?file=miniupnpc-1.9.tar.gz
 cd miniupnpc-1.9/
 sudo make install
+
+rm -rf ~/miniupnpc
+
+echo "dependencies installed" && exit 
 
 fi #END INSTALLING DEPENDENCIES
 
@@ -74,17 +82,19 @@ sed -i -e "s@$srcPszTimestampOfficial.*@ pszTimestamp = \"$RegularTime $RandomSt
 -e "s@$srcOfficialNonce.*@        unsigned int nNonceGenesis=0;@" \
 -e "s@$srcTestnetNonce.*@            nNonceGenesis=0;@" main.cpp
 
+sed -i -e "s@.*$srcDataDir.*@$newDataDir@" util.cpp
+
 make -f makefile.unix
 
 cd ~
 
 #Create the conf file with the rpcuser and rpcpasswords set
 
-rm -rf ~/.nu
+rm -rf ~/.nuTESTING
 
 cd ~
-mkdir -p ~/.nu
-cd ~/.nu
+mkdir -p ~/.nuTESTING
+cd ~/.nuTESTING
 touch nu.conf
 echo rpcuser=safasfasdf >> nu.conf
 echo rpcpassword=asdfasdfadsf >> nu.conf
@@ -101,7 +111,7 @@ sleep 15
 
 
 #Parsing debug logs for needed strings
-cd ~/.nu
+cd ~/.nuTESTING
 
 #Genesis Hash
 officialGenHash=$(cat debug.log | grep "genesis hash")
@@ -151,6 +161,11 @@ sed -i -e "s@.*$srcV3SwitchOfficial.*@unsigned int nProtocolV03SwitchTime     = 
 sed -i -e "s@.*$srcHashGenesisBlockOfficial.*@static const uint256 hashGenesisBlockOfficial(\"$genHashString\");@" \
 -e "s@.*$srcHashGenesisBlockTestNet.*@static const uint256 hashGenesisBlockTestNet(\"$genHashStringTest\");@" main.h
 
+sed -i -e "s@.*$srcDataDir.*@$newDataDir@" util.cpp
+
+sed -i -e "s@.*$srcDNSseedLine1.*@@" \
+-e "s@.*$srcDNSseedLine2@@" net.cpp
+
 sed -i -e "s@.*$srcPszTimestampOfficial.*@        const char* pszTimestamp = \"$RegularTime $RandomString\";@" \
 -e "s@.*$srcPszTimestampTestnet.*@            pszTimestamp=\"$RegularTime $RandomString\";@" \
 -e "s@.*$srcOfficialNonce.*@        unsigned int nNonceGenesis=$NonceString;@" \
@@ -171,18 +186,19 @@ make -f makefile.unix
 
 cd ..
 
+#Making the GUI as well
+
 qmake
 
 make
 
-mv ~/.nu ~/.nu$RandomString
-mkdir ~/.nu
+mkdir ~/.nuTESTING
 
-cd ~/.nu
+cd ~/.nuTESTING
 touch nu.conf
 
 echo \#testnet=1 >> nu.conf
-echo \#server=1 >> nu.conf
+echo server=1 >> nu.conf
 echo rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
 echo rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
 
@@ -191,6 +207,10 @@ echo \#PROTOCOL PORT 7890 >> nu.conf
 echo \#RPC PORT 14001 >> nu.conf
 echo \#TESTNET PORT      7895 >> nu.conf
 echo \#TESTNET RPC PORT 15001 >> nu.conf
+
+echo gen=1 >> nu.conf
+echo \#replace PORT with the docker port number that points to mainnet/testnet protocol port >> nu.conf
+echo \#connect=127.0.0.1:PORT >> nu.conf
 
 
 echo "MerkleRoot=$merkRootString"
@@ -201,14 +221,16 @@ echo "TestGenHashString=$genHashStringTest"
 echo "TestNonceString=$NonceStringTest"
 
 
+
+
 #BEGIN DOCKER SECTION
 
 #Making sure we have the image we will use for our docker 
 
-mkdir ~/nudocker
-cd ~/nudocker
+cp $1/src/nud $((dirname $1)/nudocker)
 
-cp ~/nubit/src/nud ~/nudocker
+
+
 
 #touch Dockerfile
 #echo FROM phusion/baseimage >> Dockerfile

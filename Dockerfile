@@ -1,20 +1,16 @@
 FROM ubuntu:14.04
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8842CE5E
+RUN echo deb http://ppa.launchpad.net/bitcoin/bitcoin/ubuntu trusty main >/etc/apt/sources.list.d/bitcoin.list
+RUN apt-get update # 2014-11-01
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN apt-get install -y libboost-filesystem1.54.0 libboost-program-options1.54.0 libboost-thread1.54.0
+RUN apt-get install -y libdb4.8++
+RUN apt-get install -y libcurl4-openssl-dev
 
-RUN apt-get update
-RUN apt-get install -y openssh-server software-properties-common python-software-properties language-pack-en nano
-RUN apt-add-repository ppa:bitcoin/bitcoin -y
+COPY ./nud /root/nud
+COPY /Start.sh /Start.sh
+COPY nu.conf /root/.nu/
 
-RUN mkdir /var/run/sshd
-RUN echo 'root:nubits' | chpasswd
-RUN sed --in-place=.bak 's/without-password/yes/' /etc/ssh/sshd_config
-
-ADD ./nud /root/nud
-ADD /dep.sh /dep.sh
-ADD /GenConf.sh /GenConf.sh
-ADD /Start.sh /Start.sh
-
-RUN ./dep.sh
-RUN ./GenConf.sh
 RUN ./Start.sh
 
 RUN locale-gen en_US.UTF-8  
@@ -28,4 +24,4 @@ EXPOSE 14001
 EXPOSE 15001
 EXPOSE 22
 
-CMD    ["/usr/sbin/sshd", "-D"]
+CMD ["/root/nud","--daemon"]

@@ -1,17 +1,11 @@
 sudo docker pull ubuntu:14.04
 
-sudo docker build -t="Nodes" .
+sudo docker build -t="nodes" .
 
 sudo docker rm -f Node1
-sudo docker rm -f Node2
-sudo docker rm -f Node3
 
-clear
+sudo docker run --name "node1" -t -d -P nodes
 
-sudo docker run --name "Node1" -t -d -n -P Nodes
-
-sudo docker run --name "Node2" -t -d -n -P Nodes
-
-sudo docker run --name "Node3" -t -d -n -P Nodes
+sudo docker attach "node1"
 
 sudo docker ps
