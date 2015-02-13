@@ -41,7 +41,7 @@ if [[ $1 = "dep" ]]; then
 sudo apt-add-repository ppa:bitcoin/bitcoin -y
 
 sudo apt-get update
-sudo apt-get install git build-essential g++ libssl-dev libboost-all-dev libdb4.8++-dev libqrencode-dev qt4-qmake libqt4-dev docker.io -y
+sudo apt-get install git build-essential g++ libssl-dev libboost-all-dev libdb4.8++-dev libqrencode-dev qt4-qmake libqt4-dev docker.io libcurl4-openssl-dev -y
 
 #Needed to install docker
 sudo ln -sf /usr/bin/docker.io /usr/local/bin/docker
@@ -84,7 +84,7 @@ sed -i -e "s@$srcPszTimestampOfficial.*@ pszTimestamp = \"$RegularTime $RandomSt
 
 sed -i -e "s@.*$srcDataDir.*@$newDataDir@" util.cpp
 
-make -f makefile.unix
+make -f makefile.unix USE_UPNP=-
 
 cd ~
 
@@ -182,7 +182,7 @@ sed -i -e "s@.*$srcPszTimestampOfficial.*@        const char* pszTimestamp = \"$
 #-e "s/@$srcMerkleRootTestNet.*@/            assert(block.hashMerkleRoot == uint256(\"0x$merkRootStringTest\"));/2" | tr '@' '\n' > main.cppp
 
 
-make -f makefile.unix
+make -f makefile.unix USE_UPNP=-
 
 cd ..
 
@@ -190,17 +190,19 @@ cd ..
 
 qmake
 
-make
+make USE_UPNP=-
 
 mkdir ~/.nuTESTING
 
 cd ~/.nuTESTING
 touch nu.conf
 
-echo \#testnet=1 >> nu.conf
+echo testnet=1 > nu.conf
 echo server=1 >> nu.conf
-echo rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
-echo rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
+#echo rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
+#echo rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
+echo rpcuser=user >> nu.conf
+echo rpcpassword=pass >> nu.conf
 
 echo \#INFO >> nu.conf
 echo \#PROTOCOL PORT 7890 >> nu.conf
@@ -213,12 +215,12 @@ echo \#replace PORT with the docker port number that points to mainnet/testnet p
 echo \#connect=127.0.0.1:PORT >> nu.conf
 
 
-echo "MerkleRoot=$merkRootString"
-echo "GenHashString=$genHashString"
-echo "NonceString=$NonceString"
-echo "TestMerkleRoot=$merkRootStringTest"
-echo "TestGenHashString=$genHashStringTest"
-echo "TestNonceString=$NonceStringTest"
+echo "MerkleRoot= $merkRootString"
+echo "GenHashString= $genHashString"
+echo "NonceString= $NonceString"
+echo "TestMerkleRoot= $merkRootStringTest"
+echo "TestGenHashString= $genHashStringTest"
+echo "TestNonceString= $NonceStringTest"
 
 
 
@@ -227,7 +229,8 @@ echo "TestNonceString=$NonceStringTest"
 
 #Making sure we have the image we will use for our docker 
 
-cp $1/src/nud $((dirname $1)/nudocker)
+cp $1/src/nud $($(dirname $1)nudocker/nud)
+cp $1/nu $($(dirname $1)nudocker/nu)
 
 
 

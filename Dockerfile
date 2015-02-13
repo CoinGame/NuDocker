@@ -8,10 +8,7 @@ RUN apt-get install -y libdb4.8++
 RUN apt-get install -y libcurl4-openssl-dev
 
 COPY ./nud /root/nud
-COPY /Start.sh /Start.sh
-COPY nu.conf /root/.nu/
-
-RUN ./Start.sh
+COPY nu.conf /.nuTESTING/nu.conf
 
 RUN locale-gen en_US.UTF-8  
 ENV LANG en_US.UTF-8  
@@ -24,4 +21,4 @@ EXPOSE 14001
 EXPOSE 15001
 EXPOSE 22
 
-CMD ["/root/nud","--daemon"]
+CMD /root/nud
