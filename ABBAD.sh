@@ -12,6 +12,7 @@ srcV3SwitchOfficial="unsigned int nProtocolV03SwitchTime"
 srcV3SwitchTestnet="unsigned int nProtocolV03TestSwitchTime"
 srcV4SwitchOfficial="unsigned int nProtocolV04SwitchTime"
 srcV4SwitchTestnet="unsigned int nProtocolV04TestSwitchTime"
+srcV6Switch="    return (pindex->nTime >= 1425218400); // 2015-03-01 14:00:00 UTC"
 srcHashGenesisBlockOfficial="static const uint256 hashGenesisBlockOfficial("
 srcHashGenesisBlockTestNet="static const uint256 hashGenesisBlockTestNet("
 srcOfficialNonce="        unsigned int nNonceGenesis="
@@ -25,15 +26,18 @@ srcMerkleRootTestNet="d044ad667adb2ec5073dc2f033f8ed9458f92515eb13310fb1fccfb424
 srcDNSseedLine1="    0x47a034c6, 0x04d934c6, 0x4bc734c6, 0x2ec734c6, 0x2bd0f2a2, 0x92c8edc0,"
 srcDNSseedLine2="    0x0bd4b977, 0x003fc977,"
 srcDataDir="    return pathRet / \".nu\";"
+newDataDir="    return pathRet / \".nuTESTING\";"
+
 
 #Seting some predefined variables to use later
 RegularTimeSwitch=$(date --date='1 day'  --utc)
 EpochTimeSwitch=$(date +%s --date='1 day')
 RegularTime=$(date)
 EpochTime=$(date +%s)
+V6SwitchTime=$(date -d '30 minutes' +%s)
 #Get a big ass random string
 RandomString=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-newDataDir="    return pathRet / \".nuTESTING\";"
+
 
 if [[ $1 = "dep" ]]; then
 
@@ -173,7 +177,8 @@ sed -i -e "s@.*$srcPszTimestampOfficial.*@        const char* pszTimestamp = \"$
 -e "s@.*$srcTimeGenesisOfficial.*@        unsigned int nTimeGenesis=$EpochTime;@" \
 -e "s@.*$srcTimeGenesisTestnet.*@            nTimeGenesis=$EpochTime;@" \
 -e "s@assert(block.hashMerkleRoot == uint256(\"0x$srcMerkleRootOfficial\"));@assert(block.hashMerkleRoot == uint256(\"0x$merkRootString\"));@" \
--e "s@assert(block.hashMerkleRoot == uint256(\"0x$srcMerkleRootTestNet\"));@assert(block.hashMerkleRoot == uint256(\"0x$merkRootStringTest\"));@" main.cpp
+-e "s@assert(block.hashMerkleRoot == uint256(\"0x$srcMerkleRootTestNet\"));@assert(block.hashMerkleRoot == uint256(\"0x$merkRootStringTest\"));@" \
+-e "s@.*$srcV6Switch.*@    return (pindex->nTime >= $V6SwitchTime);@" main.cpp
 
 
 #need to fix this so i don't have to update the merkelroot when it changes. All other lines that need to be changed can be found dynamicaly.
@@ -192,8 +197,9 @@ qmake
 
 make USE_UPNP=-
 
-mkdir ~/.nuTESTING
+rm -rf ~/.nuTESTING
 
+mkdir ~/.nuTESTING
 cd ~/.nuTESTING
 touch nu.conf
 
@@ -223,14 +229,12 @@ echo "TestGenHashString= $genHashStringTest"
 echo "TestNonceString= $NonceStringTest"
 
 
-
-
 #BEGIN DOCKER SECTION
 
 #Making sure we have the image we will use for our docker 
 
-cp $1/src/nud $($(dirname $1)nudocker/nud)
-cp $1/nu $($(dirname $1)nudocker/nu)
+cp $1/src/nud ~/git/nudocker/nud
+cp $1/nu ~/git/nudocker/nu
 
 
 
