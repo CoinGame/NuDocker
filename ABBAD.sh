@@ -35,6 +35,7 @@ EpochTimeSwitch=$(date +%s --date='1 day')
 RegularTime=$(date)
 EpochTime=$(date +%s)
 V6SwitchTime=$(date -d '30 minutes' +%s)
+NuDockerDir=$(dirname $0)
 #Get a big ass random string
 RandomString=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
@@ -233,8 +234,8 @@ echo "TestNonceString= $NonceStringTest"
 
 #Making sure we have the image we will use for our docker 
 
-cp $1/src/nud ~/git/nudocker/nud
-cp $1/nu ~/git/nudocker/nu
+cp $1/src/nud $NuDockerDir/nud
+cp $1/nu $NuDockerDir/nu
 
 
 
