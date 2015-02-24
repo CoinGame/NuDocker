@@ -38,35 +38,6 @@ V6SwitchTime=$(date -d '30 minutes' +%s)
 #Get a big ass random string
 RandomString=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-
-if [[ $1 = "dep" ]]; then
-
-#Install dependencies
-sudo apt-add-repository ppa:bitcoin/bitcoin -y
-
-sudo apt-get update
-sudo apt-get install git build-essential g++ libssl-dev libboost-all-dev libdb4.8++-dev libqrencode-dev qt4-qmake libqt4-dev docker.io libcurl4-openssl-dev -y
-
-#Needed to install docker
-sudo ln -sf /usr/bin/docker.io /usr/local/bin/docker
-sudo sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io
-
-#Install Mini-UPnPC
-cd ~
-mkdir miniupnpc
-cd miniupnpc
-wget "http://miniupnp.tuxfamily.org/files/download.php?file=miniupnpc-1.9.tar.gz"
-tar -zxvf download.php?file=miniupnpc-1.9.tar.gz
-cd miniupnpc-1.9/
-sudo make install
-
-rm -rf ~/miniupnpc
-
-echo "dependencies installed" && exit 
-
-fi #END INSTALLING DEPENDENCIES
-
-
 #take in the location to the source as parameter"
 src=$1/src
 if [ -z "$1" ]; then 
@@ -232,17 +203,6 @@ $(dirname $0)/nud
 
 cp $1/src/nud $(dirname $0)/nud
 cp $1/nu $(dirname $0)/nu
-
-
-
-
-#touch Dockerfile
-#echo FROM phusion/baseimage >> Dockerfile
-
-#echo RUN apt-add-repository ppa:bitcoin/bitcoin -y >> Dockerfile
-#echo RUN apt-get update >> Dockerfile
-#echo RUN apt-get install git build-essential g++ libssl-dev libboost-all-dev libdb4.8++-dev libqrencode-dev qt4-qmake libqt4-dev -y
-#echo RUN ADD ./nud /tmp >> Dockerfile
 
 
 
