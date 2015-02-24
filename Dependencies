@@ -23,4 +23,4 @@ rm -rf ~/miniupnpc
 
 pip install --upgrade pip
 
-sudo pip install python-bitcoinrpc
+sudo pip install python-bitcoinrpc docker-py
