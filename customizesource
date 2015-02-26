@@ -6,7 +6,6 @@
 
 #EXAMPLE: sudo ABB.sh ~/<Nubits Repo Clone Dir>
 
-
 #STATIC SOURCE VARS - This section is where you will put the existing values from the source. Meaning, The values that we are searching for in the code to replace
 srcV3SwitchOfficial="unsigned int nProtocolV03SwitchTime"
 srcV3SwitchTestnet="unsigned int nProtocolV03TestSwitchTime"
@@ -170,28 +169,6 @@ make USE_UPNP=-
 
 rm -rf ~/.nuTESTING
 
-mkdir ~/.nuTESTING
-cd ~/.nuTESTING
-touch nu.conf
-
-echo testnet=1 > nu.conf
-echo server=1 >> nu.conf
-#echo rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
-#echo rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
-echo rpcuser=user >> nu.conf
-echo rpcpassword=pass >> nu.conf
-
-echo \#INFO >> nu.conf
-echo \#PROTOCOL PORT 7890 >> nu.conf
-echo \#RPC PORT 14001 >> nu.conf
-echo \#TESTNET PORT      7895 >> nu.conf
-echo \#TESTNET RPC PORT 15001 >> nu.conf
-
-echo gen=1 >> nu.conf
-echo \#replace PORT with the docker port number that points to mainnet/testnet protocol port >> nu.conf
-echo \#connect=127.0.0.1:PORT >> nu.conf
-
-
 echo "MerkleRoot= $merkRootString"
 echo "GenHashString= $genHashString"
 echo "NonceString= $NonceString"
@@ -199,10 +176,8 @@ echo "TestMerkleRoot= $merkRootStringTest"
 echo "TestGenHashString= $genHashStringTest"
 echo "TestNonceString= $NonceStringTest"
 
-$(dirname $0)/nud
-
-cp $1/src/nud $(dirname $0)/nud
-cp $1/nu $(dirname $0)/nu
+cp ~/git/nubits/src/nud $(dirname $0)/nud
+cp ~/git/nubits/nu $(dirname $0)/nu
 
 
 

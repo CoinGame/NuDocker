@@ -1,0 +1,42 @@
+#!/bin/bash
+
+nudocker=$(pwd)
+
+killall nu
+
+sudo docker rm -f node1
+
+sudo docker run --name "node1" -t -d -P nodes
+
+rm -rf ~/.nuTESTING
+
+mkdir ~/.nuTESTING
+
+cd ~/.nuTESTING
+
+touch nu.conf
+
+echo testnet=1 > nu.conf
+echo server=1 >> nu.conf
+#echo rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
+#echo rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) >> nu.conf
+echo rpcuser=user >> nu.conf
+echo rpcpassword=pass >> nu.conf
+echo \#INFO >> nu.conf
+echo \#PROTOCOL PORT 7890 >> nu.conf
+echo \#RPC PORT 14001 >> nu.conf
+echo \#TESTNET PORT      7895 >> nu.conf
+echo \#TESTNET RPC PORT 15001 >> nu.conf
+echo gen=1 >> nu.conf
+echo \#replace PORT with the docker port number that points to mainnet/testnet protocol port >> nu.conf
+echo \#connect=127.0.0.1:PORT >> nu.conf
+
+testnetProtocolPort=$(sudo docker port node1 7895)
+IFS=':' read -a ExposedTestnetProtocolPort <<< "$testnetProtocolPort"
+tnep="${ExposedTestnetProtocolPort[1]}"
+
+echo "connect=127.0.0.1:$tnep" >> nu.conf
+
+sudo docker ps
+
+$nudocker/nu &
