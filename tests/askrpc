@@ -14,5 +14,4 @@ nbtport = ((dockercli.port('node1', 15002))[0]['HostPort'])
 rpcNSR = AuthServiceProxy("http://" + rpc_user + ":" + rpc_password + "@127.0.0.1:" + nsrport)
 rpcNBT = AuthServiceProxy("http://" + rpc_user + ":" + rpc_password + "@127.0.0.1:" + nbtport)
 
-print(rpcNBT.getinfo())
 
