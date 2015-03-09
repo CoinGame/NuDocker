@@ -27,4 +27,4 @@ rm -rf ~/miniupnpc
 
 #Upgrade python package manager then install bitcoinrpc and docker python libraries
 sudo pip install --upgrade pip
-sudo pip install python-bitcoinrpc docker-py
+sudo pip install python-bitcoinrpc docker-py simplejson

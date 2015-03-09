@@ -1,0 +1,3 @@
+sudo docker kill node1
+
+sudo docker rm node1

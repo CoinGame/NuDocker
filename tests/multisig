@@ -1,3 +1,8 @@
 #!/usr/bin/env python 
 
 from askrpc import *
+
+print "test"
+
+print rpcnsr.getnewaddress()
+print rpcnbt.getnewaddress()
