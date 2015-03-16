@@ -1,12 +1,30 @@
 #!/usr/bin/env python 
 
 import simplejson as json
+import random
+import re
 from bitcoinrpc.authproxy import AuthServiceProxy
 from docker import Client
-import random
 
 dockercli = Client(base_url='unix://var/run/docker.sock',version='1.12')
  
+def getnodes():
+	containers = dockercli.containers()
+	nodelist = []
+	
+	for node in containers:
+		name = (str(node['Names'])).replace("/","")
+		print (name)
+		m = re.match("^nunode[0-9]\d*$", name)
+		
+		if m:
+			print "matched!"
+			nodelist.append(name)
+			
+	return nodelist
+			
+#return nodelist
+	
 def getnodeport(nodename, unit):
 	unit = unit.lower()
 	nodename = nodename.lower()
