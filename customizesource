@@ -12,6 +12,8 @@ srcV3SwitchTestnet="unsigned int nProtocolV03TestSwitchTime"
 srcV4SwitchOfficial="unsigned int nProtocolV04SwitchTime"
 srcV4SwitchTestnet="unsigned int nProtocolV04TestSwitchTime"
 srcV6Switch="    return (pindex->nTime >= 1425218400); // 2015-03-01 14:00:00 UTC"
+srcV6Switch2="static const unsigned int NU_PROTOCOL_V06_SWITCH_TIME         = 1425218400; // 2015-03-01 14:00:00 UTC"
+srcV6Switch3="static const unsigned int NU_PROTOCOL_V06_SWITCH_TIME_TESTNET = 1425218400; // 2015-03-01 14:00:00 UTC"
 srcHashGenesisBlockOfficial="static const uint256 hashGenesisBlockOfficial("
 srcHashGenesisBlockTestNet="static const uint256 hashGenesisBlockTestNet("
 srcOfficialNonce="        unsigned int nNonceGenesis="
@@ -150,6 +152,8 @@ sed -i -e "s@.*$srcPszTimestampOfficial.*@        const char* pszTimestamp = \"$
 -e "s@assert(block.hashMerkleRoot == uint256(\"0x$srcMerkleRootTestNet\"));@assert(block.hashMerkleRoot == uint256(\"0x$merkRootStringTest\"));@" \
 -e "s@.*$srcV6Switch.*@    return (pindex->nTime >= $V6SwitchTime);@" main.cpp
 
+sed -i -e "s@$srcV6Switch2@static const unsigned int NU_PROTOCOL_V06_SWITCH_TIME = $V6SwitchTime;@" \
+-e "s@$srcV6Switch3@static const unsigned int NU_PROTOCOL_V06_SWITCH_TIME_TESTNET = $V6SwitchTime;@" main.h
 
 #need to fix this so i don't have to update the merkelroot when it changes. All other lines that need to be changed can be found dynamicaly.
 
