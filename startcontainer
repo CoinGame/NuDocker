@@ -3,9 +3,11 @@
 sudo docker rm -f node1
 sudo docker rm -f node2
 
+sudo docker rm -f nunode1
+sudo docker rm -f nunode2
 
-sudo docker run --name "node1" -t -d -P nodes
-sudo docker run --name "node2" -t -d -P nodes
+sudo docker run --name "nunode1" -t -d -P nodes
+sudo docker run --name "nunode2" -t -d -P nodes
 
 mkdir ~/.nuTESTING
 
@@ -25,17 +27,18 @@ echo \#RPC PORT 14001 >> nu.conf
 echo \#TESTNET PORT      7895 >> nu.conf
 echo \#TESTNET RPC PORT 15001 >> nu.conf
 echo gen=1 >> nu.conf
+echo listen=1 >> nu.conf
 echo \#replace PORT with the docker port number that points to mainnet/testnet protocol port >> nu.conf
 echo \#connect=127.0.0.1:PORT >> nu.conf
 
-testnetProtocolPort=$(sudo docker port node1 7895)
+testnetProtocolPort=$(sudo docker port nunode1 7895)
 IFS=':' read -a ExposedTestnetProtocolPort <<< "$testnetProtocolPort"
 tnep="${ExposedTestnetProtocolPort[1]}"
 
 echo "addnode=127.0.0.1:$tnep"
 echo "addnode=127.0.0.1:$tnep" >> nu.conf
 
-testnetProtocolPort=$(sudo docker port node2 7895)
+testnetProtocolPort=$(sudo docker port nunode2 7895)
 IFS=':' read -a ExposedTestnetProtocolPort <<< "$testnetProtocolPort"
 tnep="${ExposedTestnetProtocolPort[1]}"
 

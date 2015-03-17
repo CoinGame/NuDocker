@@ -1,14 +1,20 @@
 #!/usr/bin/env python 
 
 from docker import Client
-import subprocess
+import os
+import sys
 
-dockercli = Client(base_url='unix://var/run/docker.sock',version='1.12')
+file, nodenum = sys.argv
 
-subprocess.call("sudo docker run --name \"node1\" -t -d -P nodes")
+int(nodenum)
+i=0
+print nodenum
 
-container = dockercli.create_container(image='nodes', name="node1",network_disabled='false')
-container2 = dockercli.create_container(image='nodes', name="node2",network_disabled='false')
+while i <= nodenum:
 
-dockercli.start(container)
-dockercli.start(container2)
+	run = "docker run --name nunode%s -t -d -P nodes" % i
+
+	os.system(run)
+	
+	i = i + 1
+

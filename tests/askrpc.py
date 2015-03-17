@@ -8,24 +8,23 @@ from docker import Client
 
 dockercli = Client(base_url='unix://var/run/docker.sock',version='1.12')
  
+#get list of containers with the name format nunode#
 def getnodes():
 	containers = dockercli.containers()
 	nodelist = []
 	
 	for node in containers:
-		name = (str(node['Names'])).replace("/","")
-		print (name)
-		m = re.match("^nunode[0-9]\d*$", name)
+		for name in node['Names']:
+			name = name.replace("/","")
+			m = re.match("^nunode[0-9]\d*$", name)
 		
 		if m:
-			print "matched!"
 			nodelist.append(name)
 			
 	return nodelist
-			
-#return nodelist
 	
-def getnodeport(nodename, unit):
+#find unit RPC port for nodes
+def getunitport(nodename, unit):
 	unit = unit.lower()
 	nodename = nodename.lower()
 	
@@ -40,16 +39,45 @@ def getnodeport(nodename, unit):
 		if unit == "b":
 			return dockercli.port(nodename, 15002)[0]['HostPort']
 
-class node(object):
+#run RPC commands against gui and docker containers
+class node():
 	
-	def __init__(self, nodename, unit):
+	def __init__(self, nodename):
 		rpc_user = 'user'
 		rpc_password = 'pass'
-		self.rpc = AuthServiceProxy("http://" + rpc_user + ":" + rpc_password + "@127.0.0.1:" + (getnodeport(nodename,unit)))
-
-class AddressBook(dict):
+		
+		self.srpc = AuthServiceProxy("http://" + rpc_user + ":" + rpc_password + "@127.0.0.1:" + (getunitport(nodename,"s")))
+		self.brpc = AuthServiceProxy("http://" + rpc_user + ":" + rpc_password + "@127.0.0.1:" + (getunitport(nodename,"b")))
+		
+class nodes(node):
 	def __init__(self):
-		print "test"
+		
+		lstnodes = getnodes()
+		
+		for i in lstnodes:
+			self.node(i)
+		
+#addressbook get manage addresses for nodes.
+class ab():
+	def __init__(self):
+		book = []
+	
+	def newaddress(self, nodename, unit):	
+		if unit.lower() == "s":
+			address = node(nodename).srpc.getnewaddress()
+			#book.append({nodename : address})
+		
+		if unit.lower() == "b":
+			#address = node(nodename).brpc.getnewaddress()
+			book.append({nodename : address})
+		
+		return address
+		
+#	def nodefromaddr
+	
+#	def addrfromnode
+	
+#	def listall
 
 #def getnewaddress (unit, source):
 	#try:
