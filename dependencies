@@ -7,11 +7,12 @@
 sudo apt-add-repository ppa:bitcoin/bitcoin -y
 
 sudo apt-get update
-sudo apt-get install git build-essential g++ libssl-dev libboost-all-dev libdb4.8++-dev libqrencode-dev qt4-qmake libqt4-dev docker.io libcurl4-openssl-dev python-pip -y
+sudo apt-get install git build-essential g++ libssl-dev libboost-all-dev libdb4.8++-dev libqrencode-dev qt4-qmake libqt4-dev libcurl4-openssl-dev python-pip curl -y
 
-#Needed to install docker
-sudo ln -sf /usr/bin/docker.io /usr/local/bin/docker
-sudo sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io
+#Install latest docker
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+curl -sSL https://get.docker.com/ubuntu/ | sudo sh
+source /etc/bash_completion.d/docker.io
 
 #Install Mini-UPnPC
 cd ~

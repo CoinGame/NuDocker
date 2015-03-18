@@ -5,10 +5,11 @@ RUN apt-get update # 2014-11-01
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get install -y libboost-filesystem1.54.0 libboost-program-options1.54.0 libboost-thread1.54.0
 RUN apt-get install -y libdb4.8++
-RUN apt-get install -y libcurl4-openssl-dev
+RUN apt-get install -y libcurl4-openssl-dev nano
+
 
 COPY ./nud /root/nud
-COPY nu.conf /.nuTESTING/nu.conf
+COPY nu.conf /root/.nuTESTING/nu.conf
 
 RUN locale-gen en_US.UTF-8  
 ENV LANG en_US.UTF-8  

@@ -1,11 +1,10 @@
 #!/usr/bin/env python 
 
 from docker import Client
-from os.path import expanduser
-import os
+from toolbox import *
 import sys
 
-dockercli = Client(base_url='unix://var/run/docker.sock',version='1.12')
+dockercli = Client(base_url='unix://var/run/docker.sock',version='1.17')
 
 #Grab number of containers to create
 file, nodenum = sys.argv
@@ -14,7 +13,7 @@ file, nodenum = sys.argv
 nodenum = int(nodenum)
 i=0
 portlist = []
-nuconf = (expanduser("~") + "/.nuTESTING/nu.conf")
+
 
 def getunitport(nodename):
 	nodename = nodename.lower()
@@ -43,12 +42,13 @@ gen=1
 listen=1
 rpcallowip=*
 """
-
+#use addnodes to add all the docker containers to the end of the conf file
 for port in portlist:
 	conf += (port + "\n")
 
-with open(nuconf, 'w') as file_:
-    file_.write(conf)
+createnudir()
+
+createnuconf(conf)
 
 
 
