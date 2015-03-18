@@ -22,3 +22,4 @@ def removecontainer():
 			os.system(nodestop)
 			os.system(noderemove)
 			
+removecontainer()

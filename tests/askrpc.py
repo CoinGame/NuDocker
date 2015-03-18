@@ -9,8 +9,14 @@ from docker import Client
 dockercli = Client(base_url='unix://var/run/docker.sock',version='1.12')
  
 #get list of containers with the name format nunode#
-def getnodes():
-	containers = dockercli.containers()
+def getnodes(listall=False):
+	
+	if listall == False:
+		containers = dockercli.containers()
+	
+	if listall == True:
+		containers = dockercli.containers(all=True)
+		
 	nodelist = []
 	
 	for node in containers:
@@ -73,11 +79,7 @@ class ab():
 		
 		return address
 		
-#	def nodefromaddr
-	
-#	def addrfromnode
-	
-#	def listall
+
 
 #def getnewaddress (unit, source):
 	#try:
