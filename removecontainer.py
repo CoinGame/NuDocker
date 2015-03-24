@@ -1,10 +1,9 @@
 #!/usr/bin/env python 
 
-from docker import Client
 import re
 import os
+from toolbox import *
 
-dockercli = Client(base_url='unix://var/run/docker.sock',version='1.17')
 
 def removecontainer():
 	containers = dockercli.containers(all=True)

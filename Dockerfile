@@ -24,4 +24,4 @@ EXPOSE 15001
 EXPOSE 15002
 EXPOSE 22
 
-CMD /root/nud
+#CMD /root/nud

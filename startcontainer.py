@@ -4,32 +4,25 @@ from docker import Client
 from toolbox import *
 import sys
 
-dockercli = Client(base_url='unix://var/run/docker.sock',version='1.17')
-
 #Grab number of containers to create
 file, nodenum = sys.argv
 
 #Makin variables and stuff
-nodenum = int(nodenum)
 i=0
-portlist = []
-
-
-def getunitport(nodename):
-	nodename = nodename.lower()
-	
-	return dockercli.port(nodename, 7895)[0]['HostPort']
+iplist = []
+ipstring = ""
 
 #create muliple containers based on the arg provided
-while i < nodenum:
+while i < int(nodenum):
 
-	run = "docker run --name nunode%s -t -d -P nodes" % i
 	name = "nunode%s" % i
+
+	os.system("docker run --name %s -t -d -P nodes /root/nud %s" % (name,ipstring))
+	print("docker run --name %s -t -d -P nodes /root/nud %s" % (name,ipstring))
+	ip = runcommand("docker inspect --format '{{ .NetworkSettings.IPAddress }}' %s" % name)
 	
-	os.system(run)
-	
-	port = getunitport(name)
-	portlist.append("addnode=127.0.0.1:%s" % port)
+	iplist.append("addnode=%s " % ip.rstrip())
+	ipstring += ("%s" % ip)
 	
 	i = i + 1
 	
@@ -40,11 +33,12 @@ rpcuser=user
 rpcpassword=pass
 gen=1
 listen=1
+splitsharesoutputs=50000000
 rpcallowip=*
 """
 #use addnodes to add all the docker containers to the end of the conf file
-for port in portlist:
-	conf += (port + "\n")
+for ip in iplist:
+	conf += (ip + "\n")
 
 createnudir()
 
