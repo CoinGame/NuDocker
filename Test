@@ -1,0 +1,22 @@
+#!/usr/bin/env python 
+
+from toolbox import *
+
+#take 80% of NSR and distribute to all existing nodes
+
+def SplitNSRtoNodes():
+	sharessend = round((float(nodelist["gui"].rpcs.getinfo()["balance"]) * .20) / len(getnodes()), 4)
+	for i in nodelist:
+		if not i == "gui":
+			address = nodelist[i].rpcs.getnewaddress()
+			print(i)
+			print(address)
+			print(sharessend)
+			
+			nodelist["gui"].rpcs.sendtoaddress("%s" % address, sharessend)
+			
+
+amount = round((float(nodelist["gui"].rpcs.getinfo()["balance"]) * .80) / len(getnodes()), 4)
+
+address = nodelist["nunode3"].rpcs.getnewaddress()
+
