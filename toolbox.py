@@ -7,7 +7,6 @@ import shutil
 import subprocess
 import simplejson as json
 from os.path import expanduser
-from toolbox import *
 from bitcoinrpc.authproxy import AuthServiceProxy
 from docker import Client
 
@@ -58,7 +57,8 @@ def getprotocolport(nodename):
 	if nodename == "gui":
 		return 7895
 	else:
-		return dockercli.port(nodename, 7895)[0]['HostPort']
+		#return dockercli.port(nodename, 7895)[0]['HostPort']
+		return runcommand("docker port %s 7895" % nodename)
 
 #find unit RPC port for nodes
 def getunitport(nodename, unit):
@@ -72,9 +72,11 @@ def getunitport(nodename, unit):
 			return "15002"
 	else:
 		if unit == "s":
-			return dockercli.port(nodename, 15001)[0]['HostPort']
+			#return dockercli.port(nodename, 15001)[0]['HostPort']
+			return runcommand("docker port %s 15001" % nodename)
 		if unit == "b":
-			return dockercli.port(nodename, 15002)[0]['HostPort']
+			#return dockercli.port(nodename, 15002)[0]['HostPort']
+			return runcommand("docker port %s 15002" % nodename)
 
 #run RPC commands against gui and docker containers
 class node():
@@ -111,66 +113,3 @@ class ab():
 			book.append({nodename : address})
 		
 		return address
-		
-
-
-
-
-
-
-#def getnewaddress (unit, source):
-	#try:
-		#if unit == "nsr":
-			
-		#if unit == "nbt":
-			#if source == "docker":
-				#return rpcnbt.getnewaddress()
-			#if source == "gui":
-				#return rpcnbtgui.getnewaddress()
-	#except: pass
-
-#class transaction(sender, recipient):
-
-	#def __init__(self, sender, recipient):
-		#sendaddr = self.sendaddr
-		#recieveaddr = self.recieveaddr
-
-	#def sendnbt(sendaddr, recieveaddr):
-		#print "test"
-
-#def votecustodian():
-##get a new NBT address to vote as custodian
-#custaddr = rpcnbtgui.getnewaddress()
-#rpcnsrgui.setvote({"parkrates":[],"custodians":[{"amount":1000000.0,"address":custaddr}],"motions":[],"fees":{}})
-
-#def sendnbt(to,amount="!"):
-#if to == "docker":
-	#sendaddr = rpcnbt.getnewaddress()
-	#balance = rpcnbtgui.getbalance()
-#if amount == "!":
-	#amount = random.uniform(.02,float(balance)*.01)
-	#print "Sending %r NBT to docker" % amount
-	#rpcnbtgui.sendtoaddress("%s" % sendaddr,amount)
-#if to == "gui":
-	#sendaddr = rpcnbtgui.getnewaddress()
-	#balance = rpcnbt.getbalance()
-#if amount == "!":
-	#amount = random.uniform(.02,float(balance)*.01)
-	#print "Sending %r NBT to gui" % amount
-	#rpcnbt.sendtoaddress("%s" % sendaddr,amount)
-	
-#def sendnsr(to,amount="!"):
-#if to == "docker":
-	#sendaddr = rpcnsr.getnewaddress()
-	#balance = rpcnsrgui.getbalance()
-#if amount == "!":
-	#amount = random.uniform(.02,float(balance)*.01) 
-	#print "Sending %r NSR to docker" % amount
-	#rpcnsrgui.sendtoaddress("%s" % sendaddr,amount)
-#if to == "gui":
-	#sendaddr = rpcnsrgui.getnewaddress()
-	#balance = rpcnsr.getbalance()
-#if amount == "!":
-	#amount = random.uniform(.02,float(balance)*.01) 
-	#print "Sending %r NSR to gui" % amount
-#rpcnsr.sendtoaddress("%s" % sendaddr,amount)

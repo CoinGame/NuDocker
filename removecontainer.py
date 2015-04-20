@@ -1,9 +1,7 @@
 #!/usr/bin/env python 
 
-import re
-import os
 from toolbox import *
-
+import os
 
 def removecontainer():
 	containers = dockercli.containers(all=True)
